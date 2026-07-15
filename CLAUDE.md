@@ -102,21 +102,17 @@ a DB `BEGIN/COMMIT`. **Always alias the DB transaction as `dbTx`** (never a bare
 
 Every fix/feature follows this flow:
 
-1. **Branch + worktree — always via `scripts/worktree.sh`.** Never run raw
-   `git worktree add` / `git checkout -b` for new work; the script is the single
-   entry point. It validates `<type>`, creates branch `type/desc` + worktree
-   `.worktrees/type-desc`, and copies `.env` in.
+1. **Branch per task — `git switch -c type/desc`.** Never commit directly to
+   `main`; every change lands via a branch + PR.
 
    ```bash
-   scripts/worktree.sh <type> <desc>     # e.g. scripts/worktree.sh feat add-transaction
-   git worktree remove .worktrees/<type>-<desc>   # clean up after merge
+   git switch -c feat/add-transaction     # new work off main
    ```
 
-   - `<type>`: one of `feat fix docs refactor test chore build ci perf style`
-     (invalid type is rejected). `<desc>`: short kebab-case.
-   - Worktrees live **inside the repo** under `.worktrees/` (gitignored) — sibling
-     dirs (`../name`) are blocked by the sandbox. They share `.git` but start
-     clean; all share the same local Postgres.
+   - `<type>`: one of `feat fix docs refactor test chore build ci perf style`.
+     `<desc>`: short kebab-case.
+   - Keep `main` protected on GitHub: require PRs, block direct pushes. That
+     branch-protection rule — not local convention — is what actually guards `main`.
 2. **Commit** with Conventional Commits: `type(scope): subject` (imperative,
    ≤50 chars; body = why, not what, wrapped ~72). No `Co-Authored-By: Claude`.
    - types: `feat` `fix` `docs` `refactor` `test` `chore` `build` `ci` `perf` `style`
