@@ -21,9 +21,6 @@ coverage.*
 go.work
 go.work.sum
 
-# Git worktrees (kept in-repo for sandbox; never tracked)
-/.worktrees/
-
 # Env / secrets (DATABASE_URL etc.)
 .env
 .env.*
