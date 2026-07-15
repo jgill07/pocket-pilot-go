@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: pocket-pilot-postgres
+    environment:
+      POSTGRES_USER: pocket_pilot
+      POSTGRES_PASSWORD: pocket_pilot
+      POSTGRES_DB: pocket_pilot
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pocket_pilot -d pocket_pilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

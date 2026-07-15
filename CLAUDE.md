@@ -43,8 +43,9 @@ nothing else changes.
   = point at RDS/Neon/Supabase; no engine switch, no dialect surprises.
 - Relational on purpose — income + budgets + reporting need aggregation
   (sum by category, by month, net income−expense).
-- Driver: **`jackc/pgx`** (v5). Migrations: **`golang-migrate`** (or goose) —
-  versioned SQL files under `migrations/`, never hand-edit the live schema.
+- Driver: **`jackc/pgx`** (v5). Migrations: **`golang-migrate`** — versioned SQL
+  files under `migrations/`, run as an external command (never embedded in the app
+  binary or added to `go.mod`), never hand-edit the live schema.
 
 ### Postgres notes
 
@@ -68,7 +69,7 @@ fields are **sparse nullable columns** added as needed (no JSON blob).
 | occurred_at   | TIMESTAMPTZ  |    ✓    |   ✓    | when the transaction should/did take place |
 | created_at    | TIMESTAMPTZ  |    ✓    |   ✓    | when the row was created in the DB          |
 | updated_at    | TIMESTAMPTZ  |    ✓    |   ✓    | last DB update                             |
-| created_by    | TEXT         |    ✓    |   ✓    | default "self" now; real user id once auth |
+| created_by    | TEXT         |    ✓    |   ✓    | real user id once auth                     |
 
 - **`occurred_at` vs `created_at`:** `occurred_at` = when the transaction
   should/did happen (user-meaningful, can be past or future). `created_at` = when
@@ -82,7 +83,8 @@ fields are **sparse nullable columns** added as needed (no JSON blob).
 - **IDs:** `UUID` column, value generated in the domain layer, not the DB.
 - **Sparse growth:** type-only fields (e.g. expense `merchant`, income `source`)
   → new nullable columns, not a metadata blob. Keeps them queryable/indexable.
-- Index on `type`; add `occurred_at` / `category` indexes when reporting lands.
+- Index on `type` and `created_by` (every query scopes to a user); add `occurred_at`
+  / `category` indexes when reporting lands.
 
 ### Naming — transaction collision
 

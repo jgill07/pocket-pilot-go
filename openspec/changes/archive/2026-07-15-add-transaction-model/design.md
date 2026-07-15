@@ -20,8 +20,7 @@ treated as constraints here.
 **Non-Goals:**
 - Service layer, storage (pgx) implementation, migrations, CLI/API wiring.
 - Income capture (model carries `Income`; nothing constructs it in v0).
-- Multi-currency logic, reporting/aggregation, auth (`CreatedBy` defaults
-  `"self"`).
+- Multi-currency logic, reporting/aggregation, auth (`CreatedBy`).
 
 ## Decisions
 

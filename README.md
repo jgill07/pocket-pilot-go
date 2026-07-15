@@ -43,6 +43,30 @@ go build ./...
 go test ./...
 ```
 
+### Local database
+
+Postgres runs in Docker; schema is managed with versioned SQL migrations
+([golang-migrate](https://github.com/golang-migrate/migrate)) run as an external
+command — never embedded in the app.
+
+Prerequisites:
+
+```bash
+brew install golang-migrate      # migrate CLI (used by the make targets)
+brew install direnv              # loads DATABASE_URL from .envrc
+```
+
+Setup:
+
+```bash
+cp .envrc.example .envrc         # then `direnv allow` to load DATABASE_URL
+make dev                         # docker compose up -d + apply all migrations
+```
+
+Other targets: `make migrate-up`, `make migrate-down`, `make migrate-force
+version=<n>`, `make migrate-create name=<desc>`, `make down` (stop; add `-v` via
+`docker compose down -v` to reset the data volume).
+
 ## Roadmap
 
 - [x] Transaction domain model + validation
