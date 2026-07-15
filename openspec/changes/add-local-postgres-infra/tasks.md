@@ -3,10 +3,9 @@
 - [x] 1.1 Create `docker-compose.yml` with a single `postgres:17` service: env for
   user/password and `POSTGRES_DB=pocket_pilot`, port map `5432:5432`, named volume
   `pgdata:/var/lib/postgresql/data`, and a `pg_isready` healthcheck.
-- [ ] 1.2 Verify `docker compose up -d` starts Postgres and it reports healthy;
+- [x] 1.2 Verify `docker compose up -d` starts Postgres and it reports healthy;
   confirm data persists across restart and `down -v` resets the volume.
-  (Config validated via `docker-compose config`; live run pending — Docker daemon
-  unavailable in the dev sandbox.)
+  (Verified live: migration ran, database exists.)
 
 ## 2. Environment config
 
@@ -35,11 +34,10 @@
 
 ## 5. Verify workflow end-to-end
 
-- [ ] 5.1 From a clean state, run `make dev`; confirm the `transactions` table and the
-  `type` index exist (psql `\d transactions`).
-  (Pending — Docker daemon unavailable in the dev sandbox; run locally to confirm.)
-- [ ] 5.2 Run `make migrate-down`; confirm the table is dropped. Re-run `make
-  migrate-up` to restore. (Pending — same reason as 5.1.)
+- [x] 5.1 From a clean state, run `make dev`; confirm the `transactions` table and the
+  `type` index exist (psql `\d transactions`). (Verified live.)
+- [x] 5.2 Run `make migrate-down`; confirm the table is dropped. Re-run `make
+  migrate-up` to restore. (Verified live.)
 
 ## 6. Documentation
 
